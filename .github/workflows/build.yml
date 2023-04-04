@@ -38,7 +38,7 @@ jobs:
             echo "ssg_base_href=$(echo https://$org_name.github.io/$repo_name/)" 
             echo "ssg_base_href=$(echo https://$org_name.github.io/$repo_name/)" >> $GITHUB_ENV
           else
-            if [ ! -z "$custom_domain" ]
+            if [ ! -z "$custom_domain" ] && [ ! -f "./Xkcd/wwwroot/CNAME" ]
             then
               echo "Persist CNAME '$custom_domain' to ./Xkcd/wwwroot/CNAME"
               echo "$custom_domain" >> ./Xkcd/wwwroot/CNAME
