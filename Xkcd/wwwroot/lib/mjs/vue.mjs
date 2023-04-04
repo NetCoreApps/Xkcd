@@ -6045,7 +6045,7 @@ function createAppAPI(render, hydrate) {
                     warn(`App has already been mounted.\n` +
                         `If you want to remount the same app, move your app creation logic ` +
                         `into a factory function and create fresh app instances for each ` +
-                        `mount - e.g. \`const createXkcdApp = () => createApp(App)\``);
+                        `mount - e.g. \`const createXkcd = () => createApp(App)\``);
                 }
             },
             unmount() {

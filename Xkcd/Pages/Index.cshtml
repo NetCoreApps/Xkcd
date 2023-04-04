@@ -10,13 +10,8 @@
         <div id="xkcd-comics"></div>
     </div> 
 </div>
-<script>comics = @await ApiResultsAsJsonAsync(new QueryXkcdComics
-                        {
-                            Ids = Enumerable.Range(1, 10).Select(_ => Random.Shared.Next(1,2630)).ToArray()
-                        })
-</script>
 <script type="module">
-import Comics from "/Pages/Comics.mjs"
+import Comics from "/mjs/Comics.mjs"
 import { mount } from "/mjs/app.mjs"
-mount("#xkcd-comics", Comics, { comics })
+mount("#xkcd-comics", Comics, { comics: [] })
 </script>

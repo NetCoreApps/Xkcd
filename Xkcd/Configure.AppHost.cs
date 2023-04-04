@@ -1,6 +1,6 @@
-[assembly: HostingStartup(typeof(XkcdApp.AppHost))]
+[assembly: HostingStartup(typeof(Xkcd.AppHost))]
 
-namespace XkcdApp;
+namespace Xkcd;
 
 public class AppHost : AppHostBase, IHostingStartup
 {
@@ -9,7 +9,7 @@ public class AppHost : AppHostBase, IHostingStartup
             // Configure ASP.NET Core IOC Dependencies
         });
 
-    public AppHost() : base("XkcdApp", typeof(MyServices).Assembly) {}
+    public AppHost() : base("Xkcd", typeof(MyServices).Assembly) {}
 
     public override void Configure(Funq.Container container)
     {

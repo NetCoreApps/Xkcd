@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace XkcdApp;
+namespace Xkcd;
 
 public class Page : PageModel
 {

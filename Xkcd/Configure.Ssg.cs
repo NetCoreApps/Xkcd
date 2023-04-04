@@ -1,8 +1,8 @@
 using ServiceStack.IO;
 
-[assembly: HostingStartup(typeof(XkcdApp.ConfigureSsg))]
+[assembly: HostingStartup(typeof(Xkcd.ConfigureSsg))]
 
-namespace XkcdApp;
+namespace Xkcd;
 
 public class ConfigureSsg : IHostingStartup
 {

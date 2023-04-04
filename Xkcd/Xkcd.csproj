@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Using Include="Ssg" />
-    <Using Include="XkcdApp" />
+    <Using Include="Xkcd" />
     <Using Include="ServiceStack" />
     <Using Include="ServiceStack.Mvc" />
   </ItemGroup>

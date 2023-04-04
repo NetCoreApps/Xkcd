@@ -1,8 +1,8 @@
 @page "/{slug}"
-@model XkcdApp.Page
+@model Xkcd.Page
 @inject MarkdownPages Markdown
 
-@implements IRenderStatic<XkcdApp.Page>
+@implements IRenderStatic<Xkcd.Page>
 @functions {
     public List<Page> GetStaticProps(RenderContext ctx)
     {

@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/XkcdApp/bin/Debug/net6.0/XkcdApp.dll",
+            "program": "${workspaceFolder}/Xkcd/bin/Debug/net6.0/Xkcd.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/XkcdApp",
+            "cwd": "${workspaceFolder}/Xkcd",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

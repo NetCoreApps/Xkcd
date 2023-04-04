@@ -2,7 +2,7 @@ using Markdig;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace XkcdApp;
+namespace Xkcd;
 
 [HtmlTargetElement("markdown", TagStructure = TagStructure.NormalOrSelfClosing)]
 [HtmlTargetElement(Attributes = "markdown")]
