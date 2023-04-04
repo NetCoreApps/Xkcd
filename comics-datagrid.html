@@ -70,11 +70,11 @@ mountAll()
         <div id="xkcd-comics"></div>
     </div> 
 </div>
-<script>comics = null</script>
+
 <script type="module">
 import Comics from "/mjs/ComicsDatagrid.mjs"
 import { mount } from "/mjs/app.mjs"
-mount("#xkcd-comics", Comics, { comics })
+mount("#xkcd-comics", Comics, { comics: [] })
 </script>
     </main>
 </div>

@@ -1,4 +1,6 @@
-import {ref} from "vue"
+import { ref, onMounted } from "vue"
+import { QueryXkcdComics } from "../../mjs/dtos.mjs"
+import { useClient } from "@servicestack/vue"
 export default {
     template: `
 <DataGrid :items="comics" 
@@ -16,6 +18,16 @@ export default {
     props: { comics:Array },
     setup(props) {
         const comics = ref(props.comics || [])
+        const client = useClient()
+
+        onMounted(async () => {
+            await initializeData();
+        })
+        async function initializeData() {
+            let results = await client.api(new QueryXkcdComics({take: 10}))
+            comics.value = results.response.results
+        }
+        
         return {comics}
     },
 }
