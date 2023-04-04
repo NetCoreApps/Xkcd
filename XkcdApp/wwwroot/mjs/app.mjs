@@ -8,7 +8,7 @@ import VueComponentGallery from "./components/VueComponentGallery.mjs"
 import VueComponentLibrary from "./components/VueComponentLibrary.mjs"
 const BaseUrl = globalThis.BaseUrl = location.origin === 'http://localhost:5000' || location.origin === 'http://localhost:8080'
     ? 'https://localhost:5001'
-    : 'https://api.blazordiffusion.com/'
+    : 'https://ssg-examples.netcore.io/'
 let client = null, Apps = []
 let AppData = {
     init:false
