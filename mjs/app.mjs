@@ -6,7 +6,7 @@ import GettingStarted from "./components/GettingStarted.mjs"
 import ShellCommand from "./components/ShellCommand.mjs"
 import VueComponentGallery from "./components/VueComponentGallery.mjs"
 import VueComponentLibrary from "./components/VueComponentLibrary.mjs"
-const BaseUrl = globalThis.BaseUrl = location.origin === 'http://localhost:5000' || location.origin === 'http://localhost:8080'
+const BaseUrl = globalThis.BaseUrl = location.origin === 'http://localhost:5100' || location.origin === 'http://localhost:8080'
     ? 'https://localhost:5001'
     : 'https://ssg-examples.netcore.io/'
 let client = null, Apps = []
