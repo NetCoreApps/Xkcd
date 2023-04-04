@@ -6,7 +6,9 @@ import GettingStarted from "./components/GettingStarted.mjs"
 import ShellCommand from "./components/ShellCommand.mjs"
 import VueComponentGallery from "./components/VueComponentGallery.mjs"
 import VueComponentLibrary from "./components/VueComponentLibrary.mjs"
-
+const BaseUrl = globalThis.BaseUrl = location.origin === 'http://localhost:5000' || location.origin === 'http://localhost:8080'
+    ? 'https://localhost:5001'
+    : 'https://api.blazordiffusion.com/'
 let client = null, Apps = []
 let AppData = {
     init:false
@@ -94,7 +96,7 @@ export function mountAll() {
 /** @param {any} [exports] */
 export function init(exports) {
     if (AppData.init) return
-    client = JsonApiClient.create()
+    client = JsonApiClient.create(BaseUrl)
     AppData = reactive(AppData)
     AppData.init = true
     mountAll()
