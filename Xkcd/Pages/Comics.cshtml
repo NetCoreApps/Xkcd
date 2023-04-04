@@ -11,9 +11,9 @@
         <div id="xkcd-comics"></div>
     </div> 
 </div>
-<script>comics = @await ApiResultsAsJsonAsync(new QueryXkcdComics{ Take = 10 })</script>
+
 <script type="module">
 import Comics from "/mjs/ComicsDatagrid.mjs"
 import { mount } from "/mjs/app.mjs"
-mount("#xkcd-comics", Comics, { comics })
+mount("#xkcd-comics", Comics, { comics: [] })
 </script>
