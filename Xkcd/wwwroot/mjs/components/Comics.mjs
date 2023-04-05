@@ -131,8 +131,14 @@ export const Comics = {
                 }
             } else {
                 pushState({ q: searchTerm.value })
-                let api = await client.api(new QueryXkcdComics({ titleContains:searchTerm.value, orderByDesc:'id' }))
-                comics.value = api.response.results
+                
+                await (async (titleContains) => {
+                    let api = await client.api(new QueryXkcdComics({ titleContains, orderByDesc:'id' }))
+                    // discard any invalidated api responses
+                    if (titleContains === searchTerm.value) {
+                        comics.value = api.response.results
+                    }
+                })(searchTerm.value)
             }
             loading.value = false
         },250)
