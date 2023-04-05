@@ -1,5 +1,5 @@
 /* Options:
-Date: 2023-04-04 05:18:55
+Date: 2023-04-05 06:47:34
 Version: 6.80
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://ssg-examples.netcore.io
@@ -37,7 +37,7 @@ export class QueryDb extends QueryBase {
     constructor(init) { super(init); Object.assign(this, init) }
 }
 export class XkcdComic {
-    /** @param {{id?:number,title?:string,imageTitle?:string,url?:string,imageUrl?:string,explainedUrl?:string,transcript?:string,explanation?:string}} [init] */
+    /** @param {{id?:number,title?:string,imageTitle?:string,url?:string,imageUrl?:string,explainedUrl?:string,transcript?:string,explanation?:string,width?:number,height?:number}} [init] */
     constructor(init) { Object.assign(this, init) }
     /** @type {number} */
     id;
@@ -55,6 +55,10 @@ export class XkcdComic {
     transcript;
     /** @type {string} */
     explanation;
+    /** @type {number} */
+    width;
+    /** @type {number} */
+    height;
 }
 export class ResponseError {
     /** @param {{errorCode?:string,fieldName?:string,message?:string,meta?:{ [index: string]: string; }}} [init] */

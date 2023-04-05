@@ -4,13 +4,8 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="bg-gray-100 py-8 dark:bg-gray-800">
+<div class="py-8">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div id="xkcd-comics"></div>
+        <div data-component="Comics"></div>
     </div> 
 </div>
-<script type="module">
-import Comics from "/mjs/Comics.mjs"
-import { mount } from "/mjs/app.mjs"
-mount("#xkcd-comics", Comics, { comics: [] })
-</script>
