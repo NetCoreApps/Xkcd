@@ -1322,6 +1322,18 @@ select{
   max-width: 65ch;
 }
 
+.max-w-\[50\%\] {
+  max-width: 50%;
+}
+
+.max-w-\[49\%\] {
+  max-width: 49%;
+}
+
+.max-w-\[48\%\] {
+  max-width: 48%;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
