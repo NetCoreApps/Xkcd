@@ -5,9 +5,9 @@ import { queryString } from "@servicestack/client"
 
 export const ModalComic = {
     template:`<ModalDialog v-if="comic" @done="$emit('done')" class="z-30">
-        <div>
-            <h2 class="text-center my-8 font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">{{ comic.title }}</h2>
-            <div class="px-8 flex justify-center">
+        <div class="p-8">
+            <h2 class="text-center mb-8 font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">{{ comic.title }}</h2>
+            <div class="p-8 flex justify-center">
                 <div class="pr-8">
                     <p v-if="comic.url" class="text-center mb-2">
                         <TextLink class="text-sm" :href="comic.url" target="_blank">{{comic.url}}</TextLink>
@@ -24,7 +24,7 @@ export const ModalComic = {
                     </p>
                 </div>
             </div>
-            <div v-if="comic.explanation" class="p-8">
+            <div v-if="comic.explanation && formatExplanation(comic.explanation).join('').length">
                 <h3 class="mb-4 text-lg font-semibold">Explanation</h3>
                 <p class="mt-4" v-for="(string, index) in formatExplanation(comic.explanation)" :key="index">{{ string }}</p>
             </div>
@@ -131,8 +131,14 @@ export const Comics = {
                 }
             } else {
                 pushState({ q: searchTerm.value })
-                let api = await client.api(new QueryXkcdComics({ titleContains:searchTerm.value, orderByDesc:'id' }))
-                comics.value = api.response.results
+                
+                await (async (titleContains) => {
+                    let api = await client.api(new QueryXkcdComics({ titleContains, orderByDesc:'id' }))
+                    // discard any invalidated api responses
+                    if (titleContains === searchTerm.value) {
+                        comics.value = api.response.results
+                    }
+                })(searchTerm.value)
             }
             loading.value = false
         },250)
