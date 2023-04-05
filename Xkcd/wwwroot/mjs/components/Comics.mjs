@@ -38,12 +38,13 @@ export default {
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold font-mono">Transcript:</h3>
-                    <p class="pr-4 sm:max-w-prose text-sm text-gray-600 font-mono">
+                    <p class="pr-4 sm:max-w-prose text-sm text-gray-600 font-mono text-xs">
                         {{selected.transcript}}
                     </p>
                 </div>
             </div>
             <div class="p-8">
+                <h3 class="mb-4 text-lg font-semibold">Explanation</h3>
                 <p class="mt-4" v-for="(string, index) in formatExplanation(selected.explanation)" :key="index">{{ string }}</p>
             </div>
         </div>      
