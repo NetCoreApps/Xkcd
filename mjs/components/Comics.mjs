@@ -3,9 +3,66 @@ import { QueryXkcdComics } from "../dtos.mjs"
 import { useClient, useUtils } from "@servicestack/vue"
 import { queryString } from "@servicestack/client"
 
-export default {
+export const ModalComic = {
+    template:`<ModalDialog v-if="comic" @done="$emit('done')" class="z-30">
+        <div>
+            <h2 class="text-center my-8 font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">{{ comic.title }}</h2>
+            <div class="px-8 flex justify-center">
+                <div class="pr-8">
+                    <a :href="comic.url" target="_blank" class="block hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-900">
+                        <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" :aria-description="comic.explanation" :alt="comic.transcript" />
+                    </a>
+                    <div class="my-2 text-sm font-semibold block text-center">{{comic.width}} x {{comic.height}}</div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold font-mono">Transcript:</h3>
+                    <p class="pr-4 sm:max-w-prose text-sm text-gray-600 dark:text-gray-300 font-mono text-xs">
+                        {{comic.transcript}}
+                    </p>
+                </div>
+            </div>
+            <div class="p-8">
+                <h3 class="mb-4 text-lg font-semibold">Explanation</h3>
+                <p class="mt-4" v-for="(string, index) in formatExplanation(comic.explanation)" :key="index">{{ string }}</p>
+            </div>
+        </div>      
+    </ModalDialog>`,
+    emits:['done'],
+    props:['comic'],
+    setup(props) {
+        function formatExplanation(explanation) {
+            const sentences = explanation.split('. ')
+            const paragraphs = []
+            let currentParagraph = ""
+            let sentenceCount = 0;
+            for (let i = 0; i < sentences.length; i++) {
+                if (sentences[i].length < 4) {
+                    currentParagraph += sentences[i] + ". "
+                    continue
+                }
+                if (i === sentences.length - 1)
+                    continue
+                currentParagraph += sentences[i] + ". "
+                sentenceCount++;
+
+                if (sentenceCount % 3 === 0) {
+                    paragraphs.push(currentParagraph)
+                    currentParagraph = ""
+                }
+            }
+
+            if (paragraphs.length === 0 || currentParagraph.length > 0)
+                paragraphs.push(currentParagraph);
+
+            return paragraphs;
+        }
+        return { formatExplanation }
+    }
+}
+
+export const Comics = {
     template: `
-<div class="flex flex-1 flex-col overflow-hidden">    
+<div class="flex flex-1 flex-col overflow-hidden">
     <div class="mb-8 mx-auto w-96">
         <h2 class="text-center mb-4 max-w-4xl font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">search xkcd</h2>
         <TextInput class="w-full w-prose w-100" type="search" v-model="searchTerm" placeholder="search xkcd comic titles" />
@@ -26,29 +83,7 @@ export default {
             <Loading>searching xkcd...</Loading>
         </div>
     </div>
-    <ModalDialog v-if="selected" @done="done" class="z-30">
-        <div>
-            <h2 class="text-center my-8 font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">{{ selected.title }}</h2>
-            <div class="px-8 flex justify-center">
-                <div class="pr-8">
-                    <a :href="selected.url" target="_blank" class="block hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-900">
-                        <img :src="selected.imageUrl" :width="selected.width" :height="selected.height" :aria-description="selected.explanation" :alt="selected.transcript" />
-                    </a>
-                    <div class="my-2 text-sm font-semibold block text-center">{{selected.width}} x {{selected.height}}</div>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold font-mono">Transcript:</h3>
-                    <p class="pr-4 sm:max-w-prose text-sm text-gray-600 dark:text-gray-300 font-mono text-xs">
-                        {{selected.transcript}}
-                    </p>
-                </div>
-            </div>
-            <div class="p-8">
-                <h3 class="mb-4 text-lg font-semibold">Explanation</h3>
-                <p class="mt-4" v-for="(string, index) in formatExplanation(selected.explanation)" :key="index">{{ string }}</p>
-            </div>
-        </div>      
-    </ModalDialog>
+    <ModalComic v-if="selected" :comic="selected" @done="done" />
 </div>
 `,
     setup(props) {
@@ -70,12 +105,12 @@ export default {
                     showModal(comics.value.find(x => x.id == qs.id))
                 }
             } else {
-                await initializeData()
+                await init()
             }
             hasInit.value = true
         })
         
-        async function initializeData() {
+        async function init() {
             loading.value = true;
             let randomIds = generateRandomNumbers(1,2630,12);
             let results = await client.api(new QueryXkcdComics({ ids:randomIds }))
@@ -130,34 +165,6 @@ export default {
             return result;
         }
         
-        function formatExplanation(explanation) {
-            const sentences = explanation.split('. ')
-            const paragraphs = [];
-            let currentParagraph = "";
-            let sentenceCount = 0;
-            for (let i = 0; i < sentences.length; i++) {
-                if(sentences[i].length < 4){
-                    currentParagraph += sentences[i] + ". ";
-                    continue;
-                }
-                if(i === sentences.length - 1)
-                    continue;
-                currentParagraph += sentences[i] + ". ";
-                sentenceCount++;
-                
-                if(sentenceCount % 3 === 0) {
-                    paragraphs.push(currentParagraph);
-                    currentParagraph = "";
-                }
-            }
-            
-            if(paragraphs.length === 0 || currentParagraph.length > 0)
-                paragraphs.push(currentParagraph);
-            
-            return paragraphs;
-        }
-
-        
-        return { comics, searchTerm, hasInit, loading, selected, showModal, done, formatExplanation }
+        return { comics, searchTerm, hasInit, loading, selected, showModal, done }
     },
 }

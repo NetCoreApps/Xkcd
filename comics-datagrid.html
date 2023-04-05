@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/svg" href="img/logo.svg">
-    <title>Xkcd Comics - Xkcd App</title>
+    <title>DataGrid View - Xkcd Comics - Xkcd App</title>
     <base href="/" />
     <script>
     const cls = document.querySelector('html').classList
@@ -20,6 +20,7 @@
 {
     "imports": {
         "app.mjs": "./mjs/app.mjs",
+        "dtos.mjs": "./mjs/dtos.mjs",
         "vue": "./lib/mjs/vue.min.mjs",
         "@servicestack/client": "./lib/mjs/servicestack-client.min.mjs",
         "@servicestack/vue": "./lib/mjs/servicestack-vue.min.mjs"
@@ -42,8 +43,13 @@
             <nav class="relative flex flex-grow leading-6 font-semibold text-slate-700 dark:text-slate-200">
                 <ul class="flex flex-wrap items-center justify-end w-full m-0 pb-2 sm:pb-0">
                             <li class="relative flex flex-wrap just-fu-start m-0">
+                                <a href="comics-auto" class="p-4 flex items-center justify-start mw-full hover:text-sky-500 dark:hover:text-sky-400">
+                                    AutoQueryGrid
+                                </a>
+                            </li>
+                            <li class="relative flex flex-wrap just-fu-start m-0">
                                 <a href="comics-datagrid" class="p-4 flex items-center justify-start mw-full hover:text-sky-500 dark:hover:text-sky-400">
-                                    Datagrid Example
+                                    DataGrid
                                 </a>
                             </li>
                     <li class="relative flex flex-wrap just-fu-start m-0">
@@ -62,16 +68,82 @@ mountAll()
 
 
 <div class="min-h-screen">
-    <main role="main" class="pb-3" hx-ext="class-tools">
+    <main role="main" class="pb-3">
         
 
 <div class="py-8">
+    <h2 class="flex justify-center items-center my-8 text-center font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">
+        <a href="https://docs.servicestack.net/vue/gallery/datagrid" target="_blank" title="DataGrid Vue Component">
+            <svg class="inline-block mr-2 h-10 w-10 hover:text-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path fill="currentColor" d="M108 84a16 16 0 1 1 16 16a16 16 0 0 1-16-16Zm128 44A108 108 0 1 1 128 20a108.12 108.12 0 0 1 108 108Zm-24 0a84 84 0 1 0-84 84a84.09 84.09 0 0 0 84-84Zm-72 36.68V132a20 20 0 0 0-20-20a12 12 0 0 0-4 23.32V168a20 20 0 0 0 20 20a12 12 0 0 0 4-23.32Z"/></svg></a>
+        DataGrid xkcd
+    </h2>
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div id="xkcd-comics"></div>
-        <div data-component="ComicsDatagrid"></div>
+        <div id="app"></div>
     </div> 
 </div>
 
+<script type="module">
+import { ref, onMounted } from "vue"
+import { QueryXkcdComics } from "dtos.mjs"
+import { mount } from "app.mjs"
+import { useClient, useUtils } from "@servicestack/vue"
+import { queryString } from "@servicestack/client"
+
+const App = {
+    template: `<div>
+    <form v-on:submit.prevent="submit" class="mb-8 mx-auto w-96">
+        <div class="flex items-center">
+            <Loading :class="['mr-2',client.loading.value ? '' : 'invisible']" />
+            <TextInput class="mr-2 w-full w-prose w-100" type="search" v-model="request.titleContains" placeholder="search xkcd comic titles" />
+            <PrimaryButton>Go</PrimaryButton>
+        </div>
+    </form>
+    <DataGrid :items="comics" 
+              selected-columns="imageUrl,transcript" 
+              v-on:row-selected="rowSelected" :is-row-selected="row => row == selected"
+              :header-titles="{ imageUrl:'Comic',transcript: 'Description' }"
+              class="max-w-screen-lg mx-auto">
+        <template #imageUrl="{ imageUrl }">
+            <img :src="imageUrl" class="h-48 object-cover" /> 
+        </template>
+        <template #transcript="{ title, transcript, width, height }">
+            <div class="flex flex-col max-w-3xl">
+                <div class="flex justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">{{ title }}</h2>
+                    <div class="text-right text-sm font-semibold block">{{width}} x {{height}}</div>
+                </div>
+                <p class="whitespace-normal break-words overflow-hidden max-h-40">{{ transcript }}</p>
+            </div>
+        </template>
+    </DataGrid>
+    <modal-comic v-if="selected" :comic="selected" v-on:done="selected=null"></modal-comic>
+</div>`,
+    props: { comics:Array },
+    setup(props) {
+        const client = useClient()
+        const { pushState } = useUtils()
+
+        const qs = queryString(location.search)
+        const comics = ref(props.comics || [])
+        const request = ref(new QueryXkcdComics({ take:25, titleContains:qs.q || '' }))
+        const selected = ref()
+
+        function rowSelected(comic,e) {
+            selected.value = comic
+        }
+
+        async function submit() {
+            let results = await client.api(request.value)
+            comics.value = results.response.results
+            pushState({ q:request.value.titleContains || undefined })
+        }
+        onMounted(submit)
+
+        return { comics, request, submit, client, selected, rowSelected }
+    },
+}
+mount('#app', App)
+</script>
     </main>
 </div>
 

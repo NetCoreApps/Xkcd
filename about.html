@@ -20,6 +20,7 @@
 {
     "imports": {
         "app.mjs": "./mjs/app.mjs",
+        "dtos.mjs": "./mjs/dtos.mjs",
         "vue": "./lib/mjs/vue.min.mjs",
         "@servicestack/client": "./lib/mjs/servicestack-client.min.mjs",
         "@servicestack/vue": "./lib/mjs/servicestack-vue.min.mjs"
@@ -42,8 +43,13 @@
             <nav class="relative flex flex-grow leading-6 font-semibold text-slate-700 dark:text-slate-200">
                 <ul class="flex flex-wrap items-center justify-end w-full m-0 pb-2 sm:pb-0">
                             <li class="relative flex flex-wrap just-fu-start m-0">
+                                <a href="comics-auto" class="p-4 flex items-center justify-start mw-full hover:text-sky-500 dark:hover:text-sky-400">
+                                    AutoQueryGrid
+                                </a>
+                            </li>
+                            <li class="relative flex flex-wrap just-fu-start m-0">
                                 <a href="comics-datagrid" class="p-4 flex items-center justify-start mw-full hover:text-sky-500 dark:hover:text-sky-400">
-                                    Datagrid Example
+                                    DataGrid
                                 </a>
                             </li>
                     <li class="relative flex flex-wrap just-fu-start m-0">
@@ -62,7 +68,7 @@ mountAll()
 
 
 <div class="min-h-screen">
-    <main role="main" class="pb-3" hx-ext="class-tools">
+    <main role="main" class="pb-3">
         
 <div class="sm:px-8 mt-16 sm:mt-32">
     <div class="mx-auto max-w-7xl lg:px-8">
