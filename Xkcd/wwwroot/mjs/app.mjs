@@ -1,6 +1,6 @@
-import { createApp, reactive, ref } from "vue"
-import { JsonApiClient, $1, $$ } from "@servicestack/client"
-import ServiceStackVue from "@servicestack/vue"
+import { createApp, nextTick, reactive, ref } from "vue"
+import { JsonApiClient, combinePaths, $1, $$ } from "@servicestack/client"
+import ServiceStackVue, { useMetadata } from "@servicestack/vue"
 import HelloApi from "./components/HelloApi.mjs"
 import GettingStarted from "./components/GettingStarted.mjs"
 import ShellCommand from "./components/ShellCommand.mjs"
@@ -104,6 +104,14 @@ export function init(exports) {
     AppData = reactive(AppData)
     AppData.init = true
     mountAll()
+    
+    nextTick(() => {
+        const { loadMetadata } = useMetadata()
+        loadMetadata({
+            resolvePath: combinePaths(client.baseUrl, 'metadata', 'app.json'),
+            olderThan: location.search.includes('clear=metadata') ? 0 : 60 * 60 * 1000 //1hr 
+        })
+    })
 
     if (exports) {
         exports.client = client

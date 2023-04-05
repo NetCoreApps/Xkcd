@@ -33,15 +33,7 @@
     
 <script type="module">
 import { ref } from "vue"
-import { mount, client } from "app.mjs"
-import { useMetadata } from "@@servicestack/vue"
-import { combinePaths } from "@@servicestack/client"
-
-const { loadMetadata } = useMetadata()
-loadMetadata({
-    resolvePath: combinePaths(client.baseUrl, 'metadata', 'app.json'),
-    olderThan: location.search.includes('clear=metadata') ? 0 : 60 * 60 * 1000 //1hr 
-})
+import { mount } from "app.mjs"
 
 const App = {
     setup(props) {
