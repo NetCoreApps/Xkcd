@@ -9,19 +9,19 @@ export const ModalComic = {
             <h2 class="text-center my-8 font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">{{ comic.title }}</h2>
             <div class="px-8 flex justify-center">
                 <div class="pr-8">
-                    <a :href="comic.url" target="_blank" class="block cursor-pointer hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-900">
+                    <a :href="comic.url" :title="comic.url" target="_blank" class="block cursor-pointer hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-900">
                         <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" :aria-description="comic.explanation" :alt="comic.transcript" />
                     </a>
                     <div class="my-2 text-sm font-semibold block text-center">{{comic.width}} x {{comic.height}}</div>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold font-mono">Transcript:</h3>
-                    <p class="pr-4 sm:max-w-prose text-sm text-gray-600 dark:text-gray-300 font-mono text-xs">
+                    <p v-if="comic.transcript" class="pr-4 sm:max-w-prose text-sm text-gray-600 dark:text-gray-300 font-mono text-xs">
                         {{comic.transcript}}
                     </p>
                 </div>
             </div>
-            <div class="p-8">
+            <div v-if="comic.explanation" class="p-8">
                 <h3 class="mb-4 text-lg font-semibold">Explanation</h3>
                 <p class="mt-4" v-for="(string, index) in formatExplanation(comic.explanation)" :key="index">{{ string }}</p>
             </div>
