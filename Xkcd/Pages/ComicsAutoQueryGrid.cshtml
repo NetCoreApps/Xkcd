@@ -12,8 +12,8 @@
     </h2>
     <div id="app">
         <auto-query-grid type="XkcdComic"
-                 selected-columns="imageUrl,width,height,id,title,transcript,explanation"
-                 :visible-from="{ title:'sm', transcript:'xl', explanation:'2xl' }"
+                 selected-columns="imageUrl,width,height,id,title,transcript,explanation,url"
+                 :visible-from="{ title:'sm', transcript:'xl', explanation:'2xl', url:'never' }"
                  :header-titles="{ imageUrl:'Comic', transcript:'Description' }"
                  v-on:row-selected="rowSelected"
                  class="mx-auto">
