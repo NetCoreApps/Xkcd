@@ -30,7 +30,6 @@ const files = {
 
 const defaultHostPrefix = 'https://raw.githubusercontent.com/NetCoreTemplates/razor-ssg/main/Xkcd/'
 const hostFiles = [
-    'Markdown.Blog.cs',
     'Markdown.Pages.cs',
     'Markdown.WhatsNew.cs',
     'MarkdownPagesBase.cs',
