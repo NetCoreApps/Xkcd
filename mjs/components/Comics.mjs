@@ -12,10 +12,10 @@ export default {
     </div>
     <div>
         <div v-if="!loading && hasInit" class="w-full pb-4 bg-white dark:bg-black border border-black flex flex-wrap">
-            <div v-if="comics.length" class="border-2 border-slate-700 ml-4 mt-4 p-4 flex justify-center items-center hover:shadow-lg hover:bg-slate-50" v-for="comic in comics">
+            <div v-if="comics.length" class="border-2 border-slate-700 ml-4 mt-4 p-4 flex justify-center items-center hover:shadow-lg hover:bg-slate-50 max-w-[48%]" v-for="comic in comics">
                 <div @click="showModal(comic)" class="cursor-pointer">
                     <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">{{ comic.title }}</h2>
-                    <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" class="h-44 object-cover" :aria-description="comic.explanation" :alt="comic.transcript" />
+                    <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" class="h-48 object-cover" :aria-description="comic.explanation" :alt="comic.transcript" />
                 </div>
             </div>
             <div v-else class="w-full">
