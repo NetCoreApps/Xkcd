@@ -12,7 +12,7 @@ export default {
     </div>
     <div>
         <div v-if="!loading && hasInit" class="w-full pb-4 bg-white dark:bg-black border border-black flex flex-wrap">
-            <div v-if="comics.length" class="border-2 border-slate-700 ml-4 mt-4 p-4 flex justify-center items-center hover:shadow-lg hover:bg-slate-50 max-w-[48%]" v-for="comic in comics">
+            <div v-if="comics.length" class="border-2 border-slate-700 ml-4 mt-4 p-4 flex justify-center items-center hover:shadow-lg hover:bg-slate-50 dark: hover:bg-slate-900 max-w-[48%]" v-for="comic in comics">
                 <div @click="showModal(comic)" class="cursor-pointer">
                     <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">{{ comic.title }}</h2>
                     <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" class="h-48 object-cover" :aria-description="comic.explanation" :alt="comic.transcript" />
@@ -31,14 +31,14 @@ export default {
             <h2 class="text-center my-8 font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">{{ selected.title }}</h2>
             <div class="px-8 flex justify-center">
                 <div class="pr-8">
-                    <a :href="selected.url" target="_blank" class="block hover:shadow-lg hover:bg-slate-50">
+                    <a :href="selected.url" target="_blank" class="block hover:shadow-lg hover:bg-slate-50 dark: hover:bg-slate-900">
                         <img :src="selected.imageUrl" :width="selected.width" :height="selected.height" :aria-description="selected.explanation" :alt="selected.transcript" />
                     </a>
                     <div class="my-2 text-sm font-semibold block text-center">{{selected.width}} x {{selected.height}}</div>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold font-mono">Transcript:</h3>
-                    <p class="pr-4 sm:max-w-prose text-sm text-gray-600 font-mono text-xs">
+                    <p class="pr-4 sm:max-w-prose text-sm text-gray-600 dark:text-gray-300 font-mono text-xs">
                         {{selected.transcript}}
                     </p>
                 </div>
