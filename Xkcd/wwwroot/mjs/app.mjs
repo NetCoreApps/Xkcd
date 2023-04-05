@@ -6,9 +6,7 @@ import GettingStarted from "./components/GettingStarted.mjs"
 import ShellCommand from "./components/ShellCommand.mjs"
 import VueComponentGallery from "./components/VueComponentGallery.mjs"
 import VueComponentLibrary from "./components/VueComponentLibrary.mjs"
-import Comics from "./components/Comics.mjs"
-import ComicsDatagrid from "./components/ComicsDatagrid.mjs"
-
+import { Comics, ModalComic } from "./components/Comics.mjs"
 
 const BaseUrl = globalThis.BaseUrl = location.origin === 'http://localhost:5100' || location.origin === 'http://localhost:8080'
     ? 'https://localhost:5001'
@@ -55,7 +53,7 @@ const Components = {
     VueComponentGallery,
     VueComponentLibrary,
     Comics,
-    ComicsDatagrid,
+    ModalComic,
 }
 
 const alreadyMounted = el => el.__vue_app__ 
