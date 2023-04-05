@@ -16,8 +16,11 @@ export const ModalComic = {
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold font-mono">Transcript:</h3>
-                    <p v-if="comic.transcript" class="pr-4 sm:max-w-prose text-sm text-gray-600 dark:text-gray-300 font-mono text-xs">
+                    <p v-if="comic.transcript" class="pr-4 mb-2 sm:max-w-prose text-sm text-gray-600 dark:text-gray-300 font-mono text-xs">
                         {{comic.transcript}}
+                    </p>
+                    <p v-if="comic.url">
+                        <TextLink class="text-sm" :href="comic.url" target="_blank">{{comic.url}}</TextLink>
                     </p>
                 </div>
             </div>
