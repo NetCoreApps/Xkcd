@@ -11,22 +11,22 @@ export default {
         <TextInput class="w-full w-prose w-100" type="search" v-model="searchTerm" placeholder="search xkcd comic titles" />
     </div>
     <div>
-        <div v-if="!loading" class="w-full pb-4 bg-white dark:bg-black border border-black flex flex-wrap">
+        <div v-if="!loading && hasInit" class="w-full pb-4 bg-white dark:bg-black border border-black flex flex-wrap">
             <div v-if="comics.length" class="border-2 border-slate-700 ml-4 mt-4 p-4 flex justify-center items-center hover:shadow-lg hover:bg-slate-50" v-for="comic in comics">
                 <div @click="showModal(comic)" class="cursor-pointer">
                     <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">{{ comic.title }}</h2>
                     <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" class="h-44 object-cover" :aria-description="comic.explanation" :alt="comic.transcript" />
                 </div>
             </div>
-            <div v-else>
-                <h4 class="text-center text-lg pt-8">query returned no results</h4>            
+            <div v-else class="w-full">
+                <h4 class="text-center text-lg pt-8 pb-4">query returned no results</h4>            
             </div>
         </div>
         <div v-else class="flex justify-center items-center pt-8">
             <Loading>searching xkcd...</Loading>
         </div>
     </div>
-    <ModalDialog v-if="selected" @done="selected=null" class="z-30">
+    <ModalDialog v-if="selected" @done="done" class="z-30">
         <div>
             <h2 class="text-center my-8 font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">{{ selected.title }}</h2>
             <div class="px-8 flex justify-center">
@@ -53,46 +53,55 @@ export default {
 `,
     setup(props) {
         const comics = ref(props.comics || [])
-        const searchTerm = ref()
+        const qs = queryString(location.search)
+        const searchTerm = ref(qs.q || '')
         const client = useClient()
         const { pushState } = useUtils()
         const selected = ref()
         
         const loading = ref(false)
+        const hasInit = ref(false)
 
         onMounted(async () => {
-            const qs = queryString(location.search)
-            searchTerm.value = qs.q
-            await initializeData();
+            if (qs.q) {
+                let api = await client.api(new QueryXkcdComics({ titleContains:searchTerm.value, orderByDesc:'id' }))
+                comics.value = api.response.results
+                if (qs.id) {
+                    showModal(comics.value.find(x => x.id == qs.id))
+                }
+            } else {
+                await initializeData()
+            }
+            hasInit.value = true
         })
         
         async function initializeData() {
             loading.value = true;
             let randomIds = generateRandomNumbers(1,2630,12);
-            let results = await client.api(new QueryXkcdComics({ids: randomIds}))
+            let results = await client.api(new QueryXkcdComics({ ids:randomIds }))
             comics.value = results.response.results
-            loading.value = false;
+            loading.value = false
         }
 
         const searchApi = createDebounce(async (query) => {
-            if(!query || query.length === 0) {
+            if (!query || query.length === 0) {
                 pushState({ q: undefined })
                 let randomIds = generateRandomNumbers(1,2630,12);
-                let api = await client.api(new QueryXkcdComics({ids: randomIds}))
+                let api = await client.api(new QueryXkcdComics({ ids:randomIds }))
                 if (api.succeeded) {
                     comics.value = api.response.results
                 }
             } else {
                 pushState({ q: searchTerm.value })
-                let api = await client.api(new QueryXkcdComics({titleContains: searchTerm.value, orderByDesc: 'id'}))
+                let api = await client.api(new QueryXkcdComics({ titleContains:searchTerm.value, orderByDesc:'id' }))
                 comics.value = api.response.results
             }
-            loading.value = false;
-        },250);
+            loading.value = false
+        },250)
 
         watch(searchTerm, async(newValue,oldValue) => {
-            loading.value = true;
-            searchApi(newValue);
+            loading.value = true
+            searchApi(newValue)
         })
 
         function createDebounce(fnc, delayMs) {
@@ -107,6 +116,10 @@ export default {
         
         function showModal(comic) {
             selected.value = comic;
+            pushState({ id:comic?.id || undefined })
+        }
+        function done() {
+            showModal(null)
         }
 
         function generateRandomNumbers(low, high, count) {
@@ -145,6 +158,6 @@ export default {
         }
 
         
-        return { comics, searchTerm, loading, selected, showModal, formatExplanation }
+        return { comics, searchTerm, hasInit, loading, selected, showModal, done, formatExplanation }
     },
 }
