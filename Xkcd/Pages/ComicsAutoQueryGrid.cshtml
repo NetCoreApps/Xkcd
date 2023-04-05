@@ -18,7 +18,7 @@
                  v-on:row-selected="rowSelected"
                  class="mx-auto">
             <template #imageUrl="{ id, imageUrl }">
-                <img :src="imageUrl" class="h-12 object-cover">
+                <img :src="imageUrl" class="h-12 object-cover" loading="lazy">
             </template>
             <template #transcript="{ transcript }">
                 <p class="block max-w-sm text-ellipsis overflow-hidden" :title="transcript">{{ transcript }}</p>

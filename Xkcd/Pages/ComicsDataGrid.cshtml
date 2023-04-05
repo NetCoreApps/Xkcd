@@ -38,7 +38,7 @@ const App = {
               :header-titles="{ imageUrl:'Comic',transcript: 'Description' }"
               class="max-w-screen-lg mx-auto">
         <template #imageUrl="{ imageUrl }">
-            <img :src="imageUrl" class="h-48 object-cover" /> 
+            <img :src="imageUrl" class="h-48 object-cover" loading="lazy"> 
         </template>
         <template #transcript="{ title, transcript, width, height }">
             <div class="flex flex-col max-w-3xl">
