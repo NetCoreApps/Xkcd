@@ -1,47 +1,50 @@
 import { ref, watch, onMounted } from "vue"
-import { QueryXkcdComics } from "../../mjs/dtos.mjs"
-import { useClient } from "@servicestack/vue"
+import { QueryXkcdComics } from "../dtos.mjs"
+import { useClient, useUtils } from "@servicestack/vue"
+import { queryString } from "@servicestack/client"
 
 export default {
     template: `
-<div class="flex flex-1 flex-col overflow-hidden">
-    <header class="w-full">
-        <div class="relative z-10 flex h-16">
-            <div class="flex flex-1 justify-between px-4 sm:px-6">
-                <div class="flex flex-1">
-                    <input id="comic-search" type="text" v-model="searchTerm"
-                        class="h-full w-full border-0 py-2 pl-8 pr-3 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-0 focus:placeholder:text-gray-400 sm:block dark:bg-gray-900"
-                          placeholder="Search for a comic" />
+<div class="flex flex-1 flex-col overflow-hidden">    
+    <div class="mb-8 mx-auto w-96">
+        <h2 class="text-center mb-4 max-w-4xl font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">search xkcd</h2>
+        <TextInput class="w-full w-prose w-100" type="search" v-model="searchTerm" placeholder="search xkcd comic titles" />
+    </div>
+    <div>
+        <div v-if="!loading" class="w-full pb-4 bg-white dark:bg-black border border-black flex flex-wrap">
+            <div v-if="comics.length" class="border-2 border-slate-700 ml-4 mt-4 p-4 flex justify-center items-center hover:shadow-lg hover:bg-slate-50" v-for="comic in comics">
+                <div @click="showModal(comic)" class="cursor-pointer">
+                    <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">{{ comic.title }}</h2>
+                    <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" class="h-44 object-cover" :aria-description="comic.explanation" :alt="comic.transcript" />
                 </div>
+            </div>
+            <div v-else>
+                <h4 class="text-center text-lg pt-8">query returned no results</h4>            
             </div>
         </div>
-    </header>
-    <div class="flex flex-1 overflow-hidden">
-        <div class="hidden w-full overflow-y-auto border-l border-gray-200 dark:border-gray-800 bg-white p-8 lg:block rounded-lg mt-2 dark:bg-black">
-            <div class="grid grid-cols-12" v-if="!loading">
-                <div class="col-span-4" v-for="comic in comics">
-                    <div class="flex flex-col items-center justify-center h-full">
-                        <div class="relative sm:p-2 flex flex-col cursor-pointer items-center">
-                            <a href="#" v-on:click="showModal">
-                                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">{{ comic.title }}</h2>
-                                <img :id="'comic-' + comic.id" :src="comic.imageUrl" class="h-48" :alt="comic.transcript" :aria-description="comic.explanation" :title="comic.transcript" />
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div v-else class="flex justify-center items-center pt-8">
+            <Loading>searching xkcd...</Loading>
         </div>
     </div>
-    <ModalDialog v-if="selectedComic" @done="selectedComic = null" class="z-30">
-        <div class="pb-8">
-            <a :href="selectedComic.url" target="_blank">
-                <h2 class="mt-8 text-2xl text-center">{{ selectedComic.title }}</h2>
-                <div class="relative p-2 w-max flex flex-col mx-auto">
-                    <img :id="'modal-' + selectedComic.id" :src="selectedComic.imageUrl" class="h-full" :alt="selectedComic.transcript" :aria-description="selectedComic.explanation" :title="selectedComic.transcript" />
+    <ModalDialog v-if="selected" @done="selected=null" class="z-30">
+        <div>
+            <h2 class="text-center my-8 font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">{{ selected.title }}</h2>
+            <div class="px-8 flex justify-center">
+                <div class="pr-8">
+                    <a :href="selected.url" target="_blank" class="block hover:shadow-lg hover:bg-slate-50">
+                        <img :src="selected.imageUrl" :width="selected.width" :height="selected.height" :aria-description="selected.explanation" :alt="selected.transcript" />
+                    </a>
+                    <div class="my-2 text-sm font-semibold block text-center">{{selected.width}} x {{selected.height}}</div>
                 </div>
-            </a>
-            <div class="my-8 flex flex-col items-center">
-                <p class="mx-4 pt-4" v-for="(string, index) in formatExplanation(selectedComic.explanation)" :key="index">{{ string }}</p>
+                <div>
+                    <h3 class="text-lg font-semibold font-mono">Transcript:</h3>
+                    <p class="pr-4 sm:max-w-prose text-sm text-gray-600 font-mono">
+                        {{selected.transcript}}
+                    </p>
+                </div>
+            </div>
+            <div class="p-8">
+                <p class="mt-4" v-for="(string, index) in formatExplanation(selected.explanation)" :key="index">{{ string }}</p>
             </div>
         </div>      
     </ModalDialog>
@@ -51,11 +54,14 @@ export default {
         const comics = ref(props.comics || [])
         const searchTerm = ref()
         const client = useClient()
-        const selectedComic = ref();
+        const { pushState } = useUtils()
+        const selected = ref()
         
         const loading = ref(false)
 
         onMounted(async () => {
+            const qs = queryString(location.search)
+            searchTerm.value = qs.q
             await initializeData();
         })
         
@@ -69,12 +75,14 @@ export default {
 
         const searchApi = createDebounce(async (query) => {
             if(!query || query.length === 0) {
+                pushState({ q: undefined })
                 let randomIds = generateRandomNumbers(1,2630,12);
                 let api = await client.api(new QueryXkcdComics({ids: randomIds}))
                 if (api.succeeded) {
                     comics.value = api.response.results
                 }
             } else {
+                pushState({ q: searchTerm.value })
                 let api = await client.api(new QueryXkcdComics({titleContains: searchTerm.value, orderByDesc: 'id'}))
                 comics.value = api.response.results
             }
@@ -96,9 +104,8 @@ export default {
             };
         }
         
-        function showModal(e) {
-            let comicId = e.target.id.replace('comic-','');
-            selectedComic.value = comics.value.find(c => c.id == comicId);
+        function showModal(comic) {
+            selected.value = comic;
         }
 
         function generateRandomNumbers(low, high, count) {
@@ -137,6 +144,6 @@ export default {
         }
 
         
-        return {comics, searchTerm, loading, selectedComic, showModal, formatExplanation}
+        return { comics, searchTerm, loading, selected, showModal, formatExplanation }
     },
 }

@@ -27,14 +27,14 @@
 }
 </script>
 </head>
-<body class="bg-white dark:bg-black dark:text-white">
-<header class="border-b border-gray-200 dark:border-gray-600 pr-3">
+<body class="bg-zinc-50 dark:bg-black dark:text-white">
+<header class="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-600 pr-3">
     <div class="flex flex-wrap items-center">
         <div class="absolute z-10 top-2 left-2 sm:static flex-shrink flex-grow-0">
             <div class="cursor-pointer">
                 <a class="navbar-brand flex items-center" href="./">
-                    <svg class="w-8 h-8 sm:ml-2 sm:w-12 sm:h-12" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="currentColor" d="M10 6c1.544 1.76 2.276 4.15 2.217 6.61c3.968 1.67 9.924 6.12 11.181 12.39H28C26.051 14.31 14.918 6.77 10 6zm-2 7c4.67 4.913.81 11.582-4 12h18.97C21.5 18.289 11.95 13.533 8 13z"/></svg>
-                    <span class="hidden sm:block text-2xl font-semibold">Xkcd</span>
+                    <svg class="w-8 h-8 mx-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14z"/></svg>
+                    <span class="hidden sm:block text-2xl font-semibold">xkcd</span>
                 </a>
             </div>
         </div>
@@ -64,20 +64,16 @@ mountAll()
 <div class="min-h-screen">
     <main role="main" class="pb-3" hx-ext="class-tools">
         
-<div class="bg-gray-100 py-8 dark:bg-gray-800">
+<div class="py-8">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div id="xkcd-comics"></div>
+        <div data-component="Comics"></div>
     </div> 
 </div>
-<script type="module">
-import Comics from "/mjs/Comics.mjs"
-import { mount } from "/mjs/app.mjs"
-mount("#xkcd-comics", Comics, { comics: [] })
-</script>
+
     </main>
 </div>
 
-<footer class="bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+<footer class="bg-white dark:bg-black border-t border-slate-200 dark:border-slate-800">
   <div class="mx-auto max-w-7xl overflow-hidden py-20 px-6 sm:py-24 lg:px-8">
     <nav class="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
       <div class="pb-6">

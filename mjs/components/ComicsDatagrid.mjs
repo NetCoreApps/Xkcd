@@ -1,5 +1,5 @@
 import { ref, onMounted } from "vue"
-import { QueryXkcdComics } from "../../mjs/dtos.mjs"
+import { QueryXkcdComics } from "../dtos.mjs"
 import { useClient } from "@servicestack/vue"
 export default {
     template: `
