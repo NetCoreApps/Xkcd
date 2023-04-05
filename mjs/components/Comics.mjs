@@ -13,7 +13,7 @@ export const ModalComic = {
                         <TextLink class="text-sm" :href="comic.url" target="_blank">{{comic.url}}</TextLink>
                     </p>
                     <a :href="comic.url" :title="comic.url" target="_blank" class="block cursor-pointer hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-900">
-                        <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" :aria-description="comic.explanation" :alt="comic.transcript" />
+                        <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" :aria-description="comic.explanation" :alt="comic.transcript">
                     </a>
                     <div class="my-2 text-sm font-semibold block text-center">{{comic.width}} x {{comic.height}}</div>
                 </div>
@@ -75,7 +75,7 @@ export const Comics = {
             <div v-if="comics.length" class="border-2 border-slate-700 ml-4 mt-4 p-4 flex justify-center items-center hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-900 max-w-[48%]" v-for="comic in comics">
                 <div @click="showModal(comic)" class="cursor-pointer">
                     <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">{{ comic.title }}</h2>
-                    <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" class="h-48 object-cover" :aria-description="comic.explanation" :alt="comic.transcript" />
+                    <img :src="comic.imageUrl" :width="comic.width" :height="comic.height" class="h-48 object-cover" :aria-description="comic.explanation" :alt="comic.transcript" loading="lazy">
                 </div>
             </div>
             <div v-else class="w-full">
