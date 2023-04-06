@@ -12,7 +12,34 @@
         DataGrid xkcd
     </h2>
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div id="app"></div>
+        <div id="app">
+            <form v-on:submit.prevent="submit" class="mb-8 mx-auto w-96">
+                <div class="flex items-center">
+                    <loading :class="['mr-2',client.loading.value ? '' : 'invisible']"></loading>
+                    <text-input class="mr-2 w-full w-prose w-100" type="search" v-model="request.titleContains" placeholder="search xkcd comic titles"></text-input>
+                    <primary-button>Go</primary-button>
+                </div>
+            </form>
+            <data-grid :items="comics" 
+                      selected-columns="imageUrl,transcript" 
+                      v-on:row-selected="rowSelected" :is-row-selected="row => row == selected"
+                      :header-titles="{ imageUrl:'Comic',transcript: 'Description' }"
+                      class="max-w-screen-lg mx-auto">
+                <template #imageUrl="{ imageUrl }">
+                    <img :src="imageUrl" class="h-48 object-cover" loading="lazy"> 
+                </template>
+                <template #transcript="{ title, transcript, width, height }">
+                    <div class="flex flex-col max-w-3xl">
+                        <div class="flex justify-between">
+                            <h2 class="text-lg font-semibold text-gray-900">{{ title }}</h2>
+                            <div class="text-right text-sm font-semibold block">{{width}} x {{height}}</div>
+                        </div>
+                        <p class="whitespace-normal break-words overflow-hidden max-h-40">{{ transcript }}</p>
+                    </div>
+                </template>
+            </data-grid>
+            <modal-comic v-if="selected" :comic="selected" v-on:done="selected=null"></modal-comic>
+        </div>
     </div> 
 </div>
 
@@ -24,34 +51,6 @@ import { useClient, useUtils } from "@@servicestack/vue"
 import { queryString } from "@@servicestack/client"
 
 const App = {
-    template: `<div>
-    <form v-on:submit.prevent="submit" class="mb-8 mx-auto w-96">
-        <div class="flex items-center">
-            <Loading :class="['mr-2',client.loading.value ? '' : 'invisible']" />
-            <TextInput class="mr-2 w-full w-prose w-100" type="search" v-model="request.titleContains" placeholder="search xkcd comic titles" />
-            <PrimaryButton>Go</PrimaryButton>
-        </div>
-    </form>
-    <DataGrid :items="comics" 
-              selected-columns="imageUrl,transcript" 
-              v-on:row-selected="rowSelected" :is-row-selected="row => row == selected"
-              :header-titles="{ imageUrl:'Comic',transcript: 'Description' }"
-              class="max-w-screen-lg mx-auto">
-        <template #imageUrl="{ imageUrl }">
-            <img :src="imageUrl" class="h-48 object-cover" loading="lazy"> 
-        </template>
-        <template #transcript="{ title, transcript, width, height }">
-            <div class="flex flex-col max-w-3xl">
-                <div class="flex justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">{{ title }}</h2>
-                    <div class="text-right text-sm font-semibold block">{{width}} x {{height}}</div>
-                </div>
-                <p class="whitespace-normal break-words overflow-hidden max-h-40">{{ transcript }}</p>
-            </div>
-        </template>
-    </DataGrid>
-    <modal-comic v-if="selected" :comic="selected" v-on:done="selected=null"></modal-comic>
-</div>`,
     props: { comics:Array },
     setup(props) {
         const client = useClient()
