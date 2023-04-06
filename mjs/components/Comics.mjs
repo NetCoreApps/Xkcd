@@ -104,18 +104,19 @@ export const Comics = {
             if (qs.q) {
                 let api = await client.api(new QueryXkcdComics({ titleContains:searchTerm.value, orderByDesc:'id' }))
                 comics.value = api.response.results
-                if (qs.id) {
-                    showModal(comics.value.find(x => x.id == qs.id))
-                }
             } else {
                 await init()
+            }
+            if (qs.id) {
+                showModal(comics.value.find(x => x.id == qs.id))
             }
             hasInit.value = true
         })
         
         async function init() {
             loading.value = true;
-            let randomIds = generateRandomNumbers(1,2630,12);
+            let randomIds = generateRandomNumbers(1,2630,12)
+            if (qs.id) randomIds.unshift(parseInt(qs.id))
             let results = await client.api(new QueryXkcdComics({ ids:randomIds }))
             comics.value = results.response.results
             loading.value = false
