@@ -1,16 +1,16 @@
-@page "/comics-auto"
+@page "/comics-autoquery"
 @attribute [RenderStatic]
 @{
-    ViewData["Title"] = "AutoQueryGrid View";
+    ViewData["Title"] = "AutoQuery View";
 }
 
-@await Html.PartialAsync("SrcLink","https://github.com/NetCoreApps/Xkcd/blob/master/Xkcd/Pages/ComicsAutoQueryGrid.cshtml")
+@await Html.PartialAsync("SrcLink","https://github.com/NetCoreApps/Xkcd/blob/master/Xkcd/Pages/ComicsAutoQuery.cshtml")
 
 <div class="p-8">
     <h2 class="flex justify-center items-center my-8 text-center font-display text-5xl font-bold tracking-tight text-slate-800 dark:text-slate-200">
         <a href="https://docs.servicestack.net/vue/gallery/autoquerygrid" target="_blank" title="AutoQueryGrid Vue Component">
             <svg class="inline-block mr-1 h-10 w-10 hover:text-indigo-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.146 9.074a2.998 2.998 0 0 1 5.28-.838A3 3 0 0 1 12 13v1m0 7a9 9 0 1 1 0-18a9 9 0 0 1 0 18Zm.05-4v.1h-.1V17h.1Z"/></svg></a>
-        AutoQueryGrid xkcd
+        AutoQuery xkcd
     </h2>
     <div id="app">
         <auto-query-grid type="XkcdComic"
