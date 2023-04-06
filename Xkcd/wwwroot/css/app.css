@@ -580,6 +580,12 @@ b {
   font-weight:600;
 }
 
+/*vue*/
+
+[v-cloak] {
+  display: none
+}
+
 /* @tailwindcss/forms css */
 
 [type='text'],[type='email'],[type='url'],[type='password'],[type='number'],[type='date'],[type='month'],[type='search'],[type='tel'],[type='time'],[multiple],textarea,select
@@ -2011,11 +2017,6 @@ select{
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-}
-
-.px-8 {
-  padding-left: 2rem;
-  padding-right: 2rem;
 }
 
 .py-0 {
