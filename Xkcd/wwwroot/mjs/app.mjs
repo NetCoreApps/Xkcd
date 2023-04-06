@@ -1,11 +1,6 @@
 import { createApp, nextTick, reactive, ref } from "vue"
 import { JsonApiClient, combinePaths, $1, $$ } from "@servicestack/client"
 import ServiceStackVue, { useMetadata } from "@servicestack/vue"
-import HelloApi from "./components/HelloApi.mjs"
-import GettingStarted from "./components/GettingStarted.mjs"
-import ShellCommand from "./components/ShellCommand.mjs"
-import VueComponentGallery from "./components/VueComponentGallery.mjs"
-import VueComponentLibrary from "./components/VueComponentLibrary.mjs"
 import ModalComic from "./components/ModalComic.mjs"
 
 const BaseUrl = globalThis.BaseUrl = location.origin === 'http://localhost:5100' || location.origin === 'http://localhost:8080'
@@ -17,41 +12,8 @@ let AppData = {
 }
 export { client, Apps }
 
-/** Simple inline component examples */
-const Hello = {
-    template: `<b>Hello, {{name}}!</b>`,
-    props: { name:String }
-}
-const Counter = {
-    template: `<b @click="count++">Counter {{count}}</b>`,
-    setup() {
-        let count = ref(1)
-        return { count }
-    }
-}
-const Plugin = {
-    template:`<div>
-        <PrimaryButton @click="show=true">Open Modal</PrimaryButton>
-        <ModalDialog v-if="show" @done="show=false">
-            <div class="p-8">Hello @servicestack/vue!</div>
-        </ModalDialog>
-    </div>`,
-    setup() {
-        const show = ref(false)
-        return { show }
-    }
-}
-
 /** Shared Components */
 const Components = {
-    HelloApi,
-    GettingStarted,
-    ShellCommand,
-    Hello,
-    Counter,
-    Plugin,
-    VueComponentGallery,
-    VueComponentLibrary,
     ModalComic,
 }
 

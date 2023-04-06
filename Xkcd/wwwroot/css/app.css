@@ -583,7 +583,7 @@ b {
 /*vue*/
 
 [v-cloak] {
-  display: none
+  display:none
 }
 
 /* @tailwindcss/forms css */
