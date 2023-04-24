@@ -2,6 +2,7 @@ import { createApp, nextTick, reactive, ref } from "vue"
 import { JsonApiClient, combinePaths, $1, $$ } from "@servicestack/client"
 import ServiceStackVue, { useMetadata } from "@servicestack/vue"
 import ModalComic from "./components/ModalComic.mjs"
+import CopyLine from "./components/CopyLine.mjs";
 
 const BaseUrl = globalThis.BaseUrl = location.origin === 'http://localhost:5100' || location.origin === 'http://localhost:8080'
     ? 'https://localhost:5001'
@@ -15,6 +16,7 @@ export { client, Apps }
 /** Shared Components */
 const Components = {
     ModalComic,
+    CopyLine
 }
 
 const alreadyMounted = el => el.__vue_app__ 
